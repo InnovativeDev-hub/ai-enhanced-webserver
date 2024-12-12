@@ -1,0 +1,136 @@
+AI-Enhanced Web Server: A Dynamic, Multi-Threaded Web Server with AI Integration
+AI-Enhanced Web Server is a modern, multi-threaded web server written in C. It serves static files like HTML, CSS, JS, PNG, and more, but it goes beyond a traditional web server by incorporating AI-driven features. This server can analyze, log, and filter requests for sensitive content and dynamically generate responses using AI cloud APIs.
+
+________________________________________
+🌟 Key Features
+1.	Multi-threaded Server: Each client request is handled by a new thread, allowing the server to process multiple clients concurrently.
+2.	AI-Powered Responses: The server supports custom AI responses at specific paths like /ai/message.
+3.	Content Filtering: Detects sensitive words (like password, secret, etc.) in both incoming requests and file content, and blocks them accordingly.
+4.	Request Logging: Logs each client's IP, request path, and timestamp for debugging and analysis.
+5.	Cross-Platform Compatibility: Runs on both Windows and macOS/Linux with simple C compilation.
+6.	Dynamic API Response: The server is API-ready, capable of integrating with external AI APIs (like OpenAI) to generate dynamic responses.
+
+________________________________________
+🚀 How to Use
+Run the server with the following command:
+./ai_server
+The server starts on port 8080 and serves files from the current directory.
+You can access it by visiting:
+arduino
+http://localhost:8080
+API Endpoints
+Endpoint	Description
+/	Serves index.html from the current directory.
+/ai/message	Returns an AI-generated message.
+/ai/info	Returns server information and system details.
+/any-path	Attempts to serve a static file from the current directory.
+Example Usage
+./ai_server
+This starts the server on port 8080 and serves files from the current directory.
+
+________________________________________
+📜 License
+This project is licensed under the MIT License, allowing free use, modification, and distribution.
+
+________________________________________
+🔧 Development Guide
+Follow these steps to compile and run AI-Enhanced Web Server on Windows, macOS, or Linux.
+1️⃣ Prerequisites
+•	C/C++ Compiler: Install a C/C++ compiler (like gcc or clang).
+•	C/C++ Tools: Install the C/C++ extension for Visual Studio Code.
+•	(Optional) Makefile Tools: If you plan to use make, install Makefile tools.
+2️⃣ Compilation Instructions
+On Windows:
+Run the following command to compile the web server:
+gcc -W -Wall -o ai_server ai_server.c -lws2_32
+On macOS or Linux (or use make):
+gcc -W -Wall -o ai_server ai_server.c -lpthread
+Once compiled, you can start the server with:
+./ai_server
+
+________________________________________
+💡 Key Concepts
+1️⃣ Multi-Threaded Request Handling
+•	Each incoming client request is processed in a new thread using pthread.
+•	This allows for multiple clients to connect and request files or AI responses simultaneously.
+2️⃣ AI Integration
+•	When a client visits /ai/message, the server generates a custom AI message.
+•	The server is prepared to call AI APIs (like OpenAI or Huggingface) to generate dynamic content.
+•	This logic can be extended to send an HTTP request to an AI cloud service and use the AI-generated response.
+3️⃣ Content Filtering
+•	Requests that contain sensitive words (like password, secret, private) are blocked.
+•	The server inspects both incoming request URLs and the content of files before serving them.
+•	If any file contains these sensitive words, the request is blocked, and a 403 Forbidden message is returned.
+
+________________________________________
+📋 Tips & Best Practices
+1.	File Permissions: Ensure that files in the current directory have the correct read permissions.
+2.	Port Availability: Make sure port 8080 is not in use by another application.
+3.	Security:
+o	Avoid exposing sensitive information in server responses.
+o	Regularly update the list of sensitive words.
+o	Use TLS encryption to secure client-server communication.
+4.	Logging: Check the server.log file to analyze requests. This log is helpful for debugging and tracking client activity.
+5.	AI API Integration:
+o	To connect to OpenAI’s API, use libcurl in C to make requests to https://api.openai.com/v1/.
+o	Modify the /ai/message response to use the API-generated text instead of the hardcoded HTML response.
+
+________________________________________
+💡 How to Customize
+Customization	How to Do It
+Add AI Cloud API	Use libcurl to call OpenAI API and modify the /ai/message route.
+Add Custom Endpoints	Add new paths in the accept_request function, like /ai/summary.
+Change Sensitive Words	Update the sensitive_words array to add/remove terms.
+Change the Port	Update the port in the PORT constant.
+Log Customization	Change the log_request function to log more data (user-agent, request method, etc.).
+
+________________________________________
+🛠️ Example Logs
+Here’s an example of server.log after running the server for a few minutes:
+[2024-12-11 12:34:56] Client: 192.168.1.2 Requested: /index.html
+[2024-12-11 12:35:01] Client: 192.168.1.3 Requested: /ai/message
+[2024-12-11 12:35:15] Client: 192.168.1.2 Requested: /private/passwords.txt (BLOCKED)
+These logs allow you to see which clients connected, what they requested, and whether their access was blocked.
+
+________________________________________
+🌐 API Integration Example
+Here’s a basic way to integrate the OpenAI API for generating dynamic responses.
+1.	Use the libcurl library in C.
+2.	Replace the /ai/message response with a call to the OpenAI API.
+Example Code for Calling OpenAI API
+#include <curl/curl.h>
+
+void ai_message(int client) {
+    CURL *curl = curl_easy_init();
+    if (curl) {
+        const char *url = "https://api.openai.com/v1/chat/completions";
+        const char *auth_header = "Authorization: Bearer YOUR_OPENAI_API_KEY";
+        const char *post_data = "{\"prompt\":\"Hello AI!\", \"max_tokens\":50}";
+
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
+        
+        struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+        headers = curl_slist_append(headers, auth_header);
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        
+        CURLcode res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        }
+        curl_easy_cleanup(curl);
+    }
+}
+Steps to Use This API Call
+1.	Replace YOUR_OPENAI_API_KEY with your OpenAI API key.
+2.	Compile the program with libcurl:
+gcc -o ai_server ai_server.c -lpthread -lcurl
+
+________________________________________
+🌟 Final Thoughts
+This AI-Enhanced Web Server is a modern, multi-threaded, API-enabled server. It’s a great starting point for learning C programming, networking, AI integration, and security concepts.
+With features like AI message generation, multi-threading, and API connectivity, this server can be used as a base for building larger, more sophisticated web applications.
+If you'd like help with API integration or want more guidance on customizing this server, let me know! 
+
