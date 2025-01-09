@@ -1,39 +1,4 @@
-
-./ai_server
-The server starts on port 8080 and serves files from the current directory.
-You can access it by visiting:
-arduino
-http://localhost:8080
-A
-This project is licensed under the MIT License, allowing free use, modification, and distribution.
-________________________________________
-🔧 Development Guide
-Follow these steps to compile and run AI-Enhanced Web Server on Windows, macOS, or Linux.
-1️⃣ Prerequisites
-•	C/C++ Compiler: Install a C/C++ compiler (like gcc or clang).
-•	C/C++ Tools: Install the C/C++ extension for Visual Studio Code.
-•	(Optional) Makefile Tools: If you plan to use make, install Makefile tools.
-2️⃣ Compilation Instructions
-On Windows:
-Run the following command to compile the web server:
-gcc -W -Wall -o ai_server ai_server.c -lws2_32
-On macOS or Linux (or use make):
-gcc -W -Wall -o ai_server ai_server.c -lpthread
-Once compiled, you can start the server with:
-./ai_server
-________________________________________
-💡 Key Concepts
-1️⃣ Multi-Threaded Request Handling
-•	Each incoming client request is processed in a new thread using pthread.
-•	This allows for multiple clients to connect and request files or AI responses simultaneously.
-2️⃣ AI Integration
-•	When a client visits /ai/message, the server generates a custom AI message.
-•	The server is prepared to call AI APIs (like OpenAI or Huggingface) to generate dynamic content.
-•	This logic can be extended to send an HTTP request to an AI cloud service and use the AI-generated response.
-3️⃣ Content Filtering
-•	Requests that contain sensitive words (like password, secret, private) are blocked.
-•	The server inspects both incoming request URLs and the content of files before serving them.
-•	If any file contains these sensitive words, the request is blocked, and a 403 Forbidden message is returned.
+.
 ________________________________________
 📋 Tips & Best Practices
 1.	File Permissions: Ensure that files in the current directory have the correct read permissions.
