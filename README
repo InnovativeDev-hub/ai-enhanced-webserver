@@ -4,17 +4,7 @@ The server starts on port 8080 and serves files from the current directory.
 You can access it by visiting:
 arduino
 http://localhost:8080
-API Endpoints
-Endpoint	Description
-/	Serves index.html from the current directory.
-/ai/message	Returns an AI-generated message.
-/ai/info	Returns server information and system details.
-/any-path	Attempts to serve a static file from the current directory.
-Example Usage
-./ai_server
-This starts the server on port 8080 and serves files from the current directory.
-________________________________________
-📜 License
+A
 This project is licensed under the MIT License, allowing free use, modification, and distribution.
 ________________________________________
 🔧 Development Guide
